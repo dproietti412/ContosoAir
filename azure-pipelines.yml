@@ -3,18 +3,9 @@ pool:
 trigger:
   - master
 steps:
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Templates'
-    inputs:
-      SourceFolder: deployment
-      Contents: '*.json'
-      TargetFolder: '$(build.artifactstagingdirectory)/Templates'
   - task: Npm@1
-    displayName: 'npm custom'
     inputs:
-      command: custom
-      verbose: false
-      customCommand: 'install --production'
+      command: install
   - script: 'npm test'
     displayName: 'Run unit tests'
     continueOnError: true
