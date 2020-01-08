@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'ubuntu-16.04'
+  vmImage: ubuntu-16.04
 trigger:
   - master
 steps:
@@ -7,15 +7,15 @@ steps:
     inputs:
       command: install
   - script: 'npm test'
-    displayName: 'Run unit test'
+    displayName: 'Run unit tests'
     continueOnError: true
   - task: PublishTestResults@2
-    displayName: 'Publish test result'
+    displayName: 'Publish Test Results'
     condition: succeededOrFailed()
     inputs:
       testResultsFiles: $(System.DefaultWorkingDirectory)/test-report.xml
   - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage'
+    displayName: 'Publish Code Coverage'
     condition: 'in(variables[''Agent.JobStatus''], ''Succeeded'')'
     inputs:
       codeCoverageTool: Cobertura
@@ -23,6 +23,11 @@ steps:
       reportDirectory: $(System.DefaultWorkingDirectory)/coverage
   - task: ArchiveFiles@2
     displayName: 'Archive sources'
+    inputs:
+      rootFolderOrFile: $(Build.SourcesDirectory)
+      includeRootFolder: false
+  - task: CopyFiles@2
+    displayName: 'Copy ARM templates'
     inputs:
       SourceFolder: deployment
       Contents: '*.json'
